@@ -74,7 +74,7 @@ public class Application {
             beanConfig.setHost("localhost:8080");
             beanConfig.setBasePath(Application.CONTEXT_PATH);
             beanConfig.setResourcePackage("revolut.resource");
-            beanConfig.setScan(true);
+//            beanConfig.setScan(true);
         }
     }
 }
