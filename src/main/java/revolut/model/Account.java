@@ -171,7 +171,7 @@ public class Account {
     }
 
     public enum FixerStatus {
-        GOOD, BAD, INSUFFICIENT_SUM, INCORRECT_CURRENCY
+        GOOD, BAD, INSUFFICIENT_SUM, INCORRECT_CURRENCY, NOT_DEFINED
     }
 
     /**
@@ -205,7 +205,7 @@ public class Account {
                 boolean result = account.addEntry(entry);
                 if (!result) {
                     this.status = FixerStatus.BAD;
-                    logger.warn("Could not added operation to account {}. {}", account.getId());
+                    logger.warn("Could not added operation to account {}.", account.getId());
                 }
                 return result;
             }

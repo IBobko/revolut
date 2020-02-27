@@ -63,8 +63,8 @@ public class AccountingTransaction {
                     final Lock payeeLock = payee.getLock();
                     if (payeeLock.tryLock(Account.WAITING_INTERVAL, TimeUnit.MILLISECONDS)) {
                         try {
-                            overallStatus.setPayerStatus(Account.FixerStatus.GOOD);
-                            overallStatus.setPayeeStatus(Account.FixerStatus.GOOD);
+                            overallStatus.setPayerStatus(Account.FixerStatus.NOT_DEFINED);
+                            overallStatus.setPayeeStatus(Account.FixerStatus.NOT_DEFINED);
                             overallStatus.setInitialPayeeBalance(payee.getBalance());
                             overallStatus.setInitialPayerBalance(payer.getBalance());
                             overallStatus.setTransferSum(to.getAmount());
@@ -76,6 +76,8 @@ public class AccountingTransaction {
                                     toFixer.getStatus().equals(Account.FixerStatus.GOOD)) {
                                 boolean fromResult = fromFixer.push();
                                 boolean toResult = toFixer.push();
+                                overallStatus.setPayerStatus(fromFixer.getStatus());
+                                overallStatus.setPayeeStatus(toFixer.getStatus());
                                 if (fromResult && toResult) {
                                     overallStatus.setPayeeBalance(payee.getBalance());
                                     overallStatus.setPayerBalance(payer.getBalance());
