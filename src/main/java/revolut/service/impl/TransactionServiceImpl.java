@@ -23,6 +23,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.holderService = holderService;
     }
 
+    @Override
     public AccountingTransaction.OverallStatus perform(TransactionRequest request) {
         Objects.requireNonNull(request, "Request can't be null.");
         Account payer = holderService.getAccountById(request.getPayerAccountId());
@@ -33,6 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
         return at.perform();
     }
 
+    @Override
     public Money getTotalSystemBalance(final CurrencyUnit currency) {
         Objects.requireNonNull(currency);
         Money totalBalance = Money.zero(currency);

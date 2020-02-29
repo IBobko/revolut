@@ -29,9 +29,9 @@ public class Account {
     @EqualsAndHashCode.Include
     private final Long id;
     private final transient Lock lock = new ReentrantLock();
-    private List<Entry> entries = new CopyOnWriteArrayList<>();
-    private Money initBalance;
-    private CurrencyUnit currency;
+    private final List<Entry> entries = new CopyOnWriteArrayList<>();
+    private final Money initBalance;
+    private final CurrencyUnit currency;
 
     public Account(final Long id, final CurrencyUnit currency, final Money initBalance, final Collection<Entry> entries) {
         Objects.requireNonNull(id, "Id can't be null");
@@ -171,7 +171,7 @@ public class Account {
     }
 
     public enum FixerStatus {
-        GOOD, BAD, INSUFFICIENT_SUM, INCORRECT_CURRENCY
+        GOOD, BAD, INSUFFICIENT_SUM, INCORRECT_CURRENCY, NOT_DEFINED
     }
 
     /**
@@ -182,8 +182,8 @@ public class Account {
      */
     static public class Fixer {
         private static final Logger logger = LoggerFactory.getLogger(Fixer.class);
-        private Account account;
-        private Entry entry;
+        private final Account account;
+        private final Entry entry;
         private FixerStatus status;
 
         private Fixer(Account account, Entry entry, FixerStatus status) {
@@ -205,7 +205,7 @@ public class Account {
                 boolean result = account.addEntry(entry);
                 if (!result) {
                     this.status = FixerStatus.BAD;
-                    logger.warn("Could not added operation to account {}. {}", account.getId());
+                    logger.warn("Could not added operation to account {}.", account.getId());
                 }
                 return result;
             }

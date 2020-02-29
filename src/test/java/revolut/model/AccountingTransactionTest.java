@@ -141,6 +141,7 @@ class AccountingTransactionTest {
 
     @Test
     public void transactionCheckingSystemForRobustWhenALotOfRequestsChangeBalanceTest() throws IOException {
+        long startingTime = System.nanoTime();
         final Money totalBalance = transactionService.getTotalSystemBalance(CurrencyUnit.USD);
         final ExecutorService service = Executors.newCachedThreadPool();
         for (int j = 0; j < 10000; j++) {
@@ -151,15 +152,13 @@ class AccountingTransactionTest {
                     Account payer = holderService.getAccountById(payerAccountId);
                     Account payee = holderService.getAccountById(payeeAccountId);
                     AccountingTransaction accountingTransaction = new AccountingTransaction(Money.of(CurrencyUnit.USD, 100), payer, payee, getZonedDateTime());
-                    AccountingTransaction.OverallStatus overallStatus = accountingTransaction.perform();
-                    assertEquals(Account.FixerStatus.GOOD, overallStatus.getPayeeStatus());
-                    assertEquals(Account.FixerStatus.GOOD, overallStatus.getPayerStatus());
-                    assertEquals(AccountingTransaction.TransactionStatus.OK, overallStatus.getStatus());
-                    return overallStatus;
+                    return accountingTransaction.perform();
                 });
             }
         }
         awaitTerminationAfterShutdown(service);
+        long finishingTime = System.nanoTime() - startingTime;
+        System.out.printf("transactionCheckingSystemForRobustWhenALotOfRequestsChangeBalanceTest takes : %d\n", finishingTime);
         final Money afterTotalBalance = transactionService.getTotalSystemBalance(CurrencyUnit.USD);
         assertEquals(totalBalance, afterTotalBalance);
     }
