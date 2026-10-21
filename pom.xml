@@ -57,7 +57,7 @@
             <artifactId>httpclient</artifactId>
             <groupId>org.apache.httpcomponents</groupId>
             <type>jar</type>
-            <version>4.5.11</version>
+            <version>4.5.13</version>
             <scope>test</scope>
         </dependency>
         <dependency>
